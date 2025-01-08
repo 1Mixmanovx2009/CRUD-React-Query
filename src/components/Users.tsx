@@ -65,7 +65,6 @@ const Users: React.FC = () => {
       setPrice(user.price);
       setDescription(user.description);
       setUrl(user.image);
-      toast.info('Edit the form to update the user!');
     } else {
       setIsEditing(false);
       setCurrentUser(null);
@@ -73,7 +72,6 @@ const Users: React.FC = () => {
       setPrice(0);
       setDescription('');
       setUrl('');
-      toast.info('Fill in the form to add a new user!');
     }
   };
 
@@ -160,7 +158,7 @@ const Users: React.FC = () => {
           onClick={closeModal}
         >
           <div
-            className="bg-white p-6 rounded shadow-lg w-96"
+            className="bg-slate-500 p-6 rounded shadow-lg w-96"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-lg font-bold mb-4">
@@ -214,7 +212,7 @@ const Users: React.FC = () => {
           onClick={closeDeleteModal}
         >
           <div
-            className="bg-white p-6 rounded shadow-lg w-96"
+            className="bg-slate-500 p-6 rounded shadow-lg w-96"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-lg font-bold mb-4">Delete User</h3>
