@@ -6,7 +6,6 @@ interface User {
   id: string;
   name: string;
   price: number;
-  description: string;
   image: string;
 }
 
@@ -31,8 +30,8 @@ const Users: React.FC = () => {
   });
 
   const updateUserMutation = useMutation({
-    mutationFn: ({ id, name, price, description, image }: User) =>
-      axios.put<User>(`https://676d28d40e299dd2ddfea145.mockapi.io/users/${id}`, { name, price, description, image }).then(res => res.data),
+    mutationFn: ({ id, name, price, image }: User) =>
+      axios.put<User>(`https://676d28d40e299dd2ddfea145.mockapi.io/users/${id}`, { name, price,  image }).then(res => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
@@ -52,7 +51,6 @@ const Users: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [name, setName] = useState('');
   const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState('');
   const [image, setUrl] = useState('');
 
   const openModal = (user?: User) => {
@@ -62,14 +60,12 @@ const Users: React.FC = () => {
       setCurrentUser(user);
       setName(user.name);
       setPrice(user.price);
-      setDescription(user.description);
       setUrl(user.image);
     } else {
       setIsEditing(false);
       setCurrentUser(null);
       setName('');
       setPrice(0);
-      setDescription('');
       setUrl('');
     }
   };
@@ -78,7 +74,6 @@ const Users: React.FC = () => {
     setIsModalOpen(false);
     setName('');
     setPrice(0);
-    setDescription('');
     setUrl('');
     setCurrentUser(null);
   };
@@ -95,9 +90,9 @@ const Users: React.FC = () => {
 
   const handleSave = () => {
     if (isEditing && currentUser) {
-      updateUserMutation.mutate({ id: currentUser.id, name, price, description, image });
+      updateUserMutation.mutate({ id: currentUser.id, name, price, image });
     } else {
-      addUserMutation.mutate({ name, price, description, image });
+      addUserMutation.mutate({ name, price,  image });
     }
     closeModal();
   };
