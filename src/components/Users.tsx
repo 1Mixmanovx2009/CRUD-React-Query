@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { toast, Toaster } from 'sonner';
 
 interface User {
   id: string;
@@ -101,7 +100,6 @@ const Users: React.FC = () => {
       addUserMutation.mutate({ name, price, description, image });
     }
     closeModal();
-    toast.success('User saved successfully!');
   };
 
   const handleDelete = () => {
@@ -109,13 +107,11 @@ const Users: React.FC = () => {
       deleteUserMutation.mutate(currentUser.id);
     }
     closeDeleteModal();
-    toast.success('User deleted successfully!');
   };
 
 
   return (
     <div className="p-6 max-w-full bg-gray-600 mx-auto">
-      <Toaster />
       <h2 className="text-2xl font-bold mb-4 text-center text-white">Users</h2>
       <button
         onClick={() => openModal()}
@@ -165,6 +161,13 @@ const Users: React.FC = () => {
               {isEditing ? 'Edit User' : 'Add User'}
             </h3>
             <input
+              type="text"
+              value={image}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="Image URL"
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+            />
+            <input
               required
               type="text"
               value={name}
@@ -180,13 +183,7 @@ const Users: React.FC = () => {
               placeholder="monthly salary"
               className="w-full p-2 border border-gray-300 rounded mb-4"
             />
-            <input
-              type="text"
-              value={image}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="Image URL"
-              className="w-full p-2 border border-gray-300 rounded mb-4"
-            />
+            
 
             <div className="flex justify-end space-x-2">
               <button
