@@ -199,7 +199,7 @@ const Users: React.FC = () => {
               </button>
               <button
                 onClick={handleSave}
-                className="px-4 py-2 bg-black text-white rounded "
+                className="px-4 py-2 bg-green-500 text-white rounded "
               >
                 Save
               </button>
@@ -228,7 +228,7 @@ const Users: React.FC = () => {
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 bg-black text-white rounded"
+                className="px-4 py-2 bg-red-500 text-white rounded"
               >
                 Delete
               </button>

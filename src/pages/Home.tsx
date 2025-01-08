@@ -1,5 +1,5 @@
 import React from 'react';
-import Users from '../components/Cars';
+import Users from '../components/Users';
 
 const Home: React.FC = () => {
   return (
