@@ -1,9 +1,9 @@
 import { useRoutes } from 'react-router-dom';
-import Management from '../pages/Management/Management';
+import Home from '../pages/Home';
 
 const Routes = () => {
   return useRoutes([
-    { path: '/', element: <Management /> },
+    { path: '/', element: <Home /> },
   ]);
 };
 

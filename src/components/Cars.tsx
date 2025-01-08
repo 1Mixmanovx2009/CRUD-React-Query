@@ -16,22 +16,22 @@ const fetchUsers = async (): Promise<User[]> => {
   return data;
 };
 
-const UsersManagement: React.FC = () => {
+const Users: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: users } = useQuery({
     queryKey: ['users'],
     queryFn: fetchUsers,
   });
 
-  const addCarMutation = useMutation({
-    mutationFn: (newCar: Omit<User, 'id'>) =>
-      axios.post<User>('https://676d28d40e299dd2ddfea145.mockapi.io/users', newCar).then(res => res.data),
+  const addUserMutation = useMutation({
+    mutationFn: (newUser: Omit<User, 'id'>) =>
+      axios.post<User>('https://676d28d40e299dd2ddfea145.mockapi.io/users', newUser).then(res => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
   });
 
-  const updateCarMutation = useMutation({
+  const updateUserMutation = useMutation({
     mutationFn: ({ id, name, price, description, image }: User) =>
       axios.put<User>(`https://676d28d40e299dd2ddfea145.mockapi.io/users/${id}`, { name, price, description, image }).then(res => res.data),
     onSuccess: () => {
@@ -39,9 +39,9 @@ const UsersManagement: React.FC = () => {
     },
   });
 
-  const deleteCarMutation = useMutation({
-    mutationFn: (carId: string) =>
-      axios.delete(`https://676d28d40e299dd2ddfea145.mockapi.io/users/${carId}`),
+  const deleteUserMutation = useMutation({
+    mutationFn: (userId: string) =>
+      axios.delete(`https://676d28d40e299dd2ddfea145.mockapi.io/users/${userId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
@@ -50,7 +50,7 @@ const UsersManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentCar, setCurrentCar] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [name, setName] = useState('');
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState('');
@@ -60,7 +60,7 @@ const UsersManagement: React.FC = () => {
     setIsModalOpen(true);
     if (user) {
       setIsEditing(true);
-      setCurrentCar(user);
+      setCurrentUser(user);
       setName(user.name);
       setPrice(user.price);
       setDescription(user.description);
@@ -68,7 +68,7 @@ const UsersManagement: React.FC = () => {
       toast.info('Edit the form to update the user!');
     } else {
       setIsEditing(false);
-      setCurrentCar(null);
+      setCurrentUser(null);
       setName('');
       setPrice(0);
       setDescription('');
@@ -83,32 +83,32 @@ const UsersManagement: React.FC = () => {
     setPrice(0);
     setDescription('');
     setUrl('');
-    setCurrentCar(null);
+    setCurrentUser(null);
   };
 
-  const openDeleteModal = (car: User) => {
+  const openDeleteModal = (User: User) => {
     setIsDeleteModalOpen(true);
-    setCurrentCar(car);
+    setCurrentUser(User);
   };
 
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
-    setCurrentCar(null);
+    setCurrentUser(null);
   };
 
   const handleSave = () => {
-    if (isEditing && currentCar) {
-      updateCarMutation.mutate({ id: currentCar.id, name, price, description, image });
+    if (isEditing && currentUser) {
+      updateUserMutation.mutate({ id: currentUser.id, name, price, description, image });
     } else {
-      addCarMutation.mutate({ name, price, description, image });
+      addUserMutation.mutate({ name, price, description, image });
     }
     closeModal();
     toast.success('User saved successfully!');
   };
 
   const handleDelete = () => {
-    if (currentCar) {
-      deleteCarMutation.mutate(currentCar.id);
+    if (currentUser) {
+      deleteUserMutation.mutate(currentUser.id);
     }
     closeDeleteModal();
     toast.success('User deleted successfully!');
@@ -116,7 +116,7 @@ const UsersManagement: React.FC = () => {
 
 
   return (
-    <div className="p-6 max-w-full] mx-auto">
+    <div className="p-6 max-w-full bg-gray-600 mx-auto">
       <Toaster />
       <h2 className="text-2xl font-bold mb-4 text-center text-white">Users</h2>
       <button
@@ -129,23 +129,23 @@ const UsersManagement: React.FC = () => {
         {users?.map((user: User) => (
           <li
             key={user.id}
-            className="bg-slate-400 p-4 rounded-xl shadow w-[400px] text-center"
+            className="bg-slate-500 p-4 rounded-xl shadow w-[400px] text-center"
           >
             <div>
+              <img src={user.image} alt='User' className="w-[300px] h-[300px] object-cover mx-auto rounded-lg" />
               <h3 className="font-bold text-[30px] mb-[20px]">{user.name}</h3>
-              <img src={user.image} alt='Car' className="w-[300px] h-[300px] object-cover mx-auto rounded-lg" />
               <p className='text-[20px] mt-[10px]'>Monthly salary: <span className='text-white'>${user.price}</span></p>
             </div>
             <div className="space-x-2">
               <button
                 onClick={() => openModal(user)}
-                className="px-4 py-2 bg-black text-white rounded hover:bg-white hover:text-black duration-300 "
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-white hover:text-green-500 duration-300 "
               >
                 Edit
               </button>
               <button
                 onClick={() => openDeleteModal(user)}
-                className="px-4 py-2 bg-black text-white rounded hover:bg-white hover:text-black duration-300"
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-white hover:text-red-500 duration-300"
               >
                 Delete
               </button>
@@ -164,7 +164,7 @@ const UsersManagement: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-lg font-bold mb-4">
-              {isEditing ? 'Edit Car' : 'Add Car'}
+              {isEditing ? 'Edit User' : 'Add User'}
             </h3>
             <input
               required
@@ -183,7 +183,7 @@ const UsersManagement: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
             />
             <input
-              type="text" // type="image" o'rniga
+              type="text"
               value={image}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Image URL"
@@ -217,7 +217,7 @@ const UsersManagement: React.FC = () => {
             className="bg-white p-6 rounded shadow-lg w-96"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-bold mb-4">Delete Car</h3>
+            <h3 className="text-lg font-bold mb-4">Delete User</h3>
             <p>Do you want to delete the user?</p>
             <div className="flex justify-end space-x-2 mt-4">
               <button
@@ -240,4 +240,4 @@ const UsersManagement: React.FC = () => {
   );
 };
 
-export default UsersManagement;
+export default Users;
